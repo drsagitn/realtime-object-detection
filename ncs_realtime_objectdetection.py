@@ -21,7 +21,7 @@ COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 # frame dimensions should be sqaure
 PREPROCESS_DIMS = (300, 300)
-DISPLAY_DIMS = (600, 600)
+DISPLAY_DIMS = (300, 300)
 
 # calculate the multiplier needed to scale the bounding boxes
 DISP_MULTIPLIER = DISPLAY_DIMS[0] // PREPROCESS_DIMS[0]
@@ -131,8 +131,11 @@ print("[INFO] starting the video stream and FPS counter...")
 vs = cv2.VideoCapture("test.avi")
 time.sleep(1)
 fps = FPS().start()
-frame_count = 0
+frame_count = -1
 # loop over frames from the video file stream
+with open('frame_to_save.txt') as f:
+	frame_to_save = f.read().split("\n")
+
 while True:
 	try:
 		# grab the frame from the threaded video stream
@@ -184,6 +187,8 @@ while True:
 		# check if we should display the frame on the screen
 		# with prediction data (you can achieve faster FPS if you
 		# do not output to the screen)
+		if str(frame_count) in frame_to_save:
+			cv2.imwrite("out_frames/" + "frame" + str(frame_count) + ".jpg", image_for_result)
 		if args["display"] > 0:
 			# display the frame to the screen
 			cv2.imshow("Output", image_for_result)
