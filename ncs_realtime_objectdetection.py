@@ -21,7 +21,7 @@ COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 # frame dimensions should be sqaure
 PREPROCESS_DIMS = (300, 300)
-DISPLAY_DIMS = (300, 300)
+DISPLAY_DIMS = (600, 600)
 
 # calculate the multiplier needed to scale the bounding boxes
 DISP_MULTIPLIER = DISPLAY_DIMS[0] // PREPROCESS_DIMS[0]
@@ -91,11 +91,11 @@ def predict(image, graph):
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-g", "--graph", required=True, default='graphs/mobilenetgraph',
+ap.add_argument("-g", "--graph", default='graphs/mobilenetgraph',
 	help="path to input graph file")
 ap.add_argument("-c", "--confidence", default=.1,
 	help="confidence threshold")
-ap.add_argument("-d", "--display", type=int, default=0,
+ap.add_argument("-d", "--display", type=int, default=1,
 	help="switch to display image on screen")
 args = vars(ap.parse_args())
 
@@ -133,9 +133,13 @@ time.sleep(1)
 fps = FPS().start()
 frame_count = -1
 # loop over frames from the video file stream
+frame_to_save = []
 with open('frame_to_save.txt') as f:
-	frame_to_save = f.read().split("\n")
-
+    for line in f.readlines():
+        if line.rstrip() != "":
+            frame_to_save.append(line.rstrip())
+        
+print(frame_to_save)
 while True:
 	try:
 		# grab the frame from the threaded video stream
@@ -181,8 +185,8 @@ while True:
 					# display the rectangle and label text
 					cv2.rectangle(image_for_result, ptA, ptB,
 						COLORS[pred_class], 2)
-					cv2.putText(image_for_result, label, (startX, y),
-						cv2.FONT_HERSHEY_SIMPLEX, 1, COLORS[pred_class], 3)
+					#cv2.putText(image_for_result, label, (startX, y),
+					#	cv2.FONT_HERSHEY_SIMPLEX, 1, COLORS[pred_class], 3)
 
 		# check if we should display the frame on the screen
 		# with prediction data (you can achieve faster FPS if you
