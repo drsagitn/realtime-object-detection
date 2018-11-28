@@ -18,7 +18,7 @@ CLASSES = ("background", "aeroplane", "bicycle", "bird",
 	"diningtable", "dog", "horse", "motorbike", "person",
 	"pottedplant", "sheep", "sofa", "train", "tvmonitor")
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
-
+COLORS[15] = [0, 255, 0]
 # frame dimensions should be sqaure
 PREPROCESS_DIMS = (300, 300)
 DISPLAY_DIMS = (600, 600)
@@ -135,10 +135,10 @@ frame_count = -1
 # loop over frames from the video file stream
 frame_to_save = []
 with open('frame_to_save.txt') as f:
-    for line in f.readlines():
-        if line.rstrip() != "":
-            frame_to_save.append(line.rstrip())
-        
+	for line in f.readlines():
+		if line.rstrip() != "":
+			frame_to_save.append(line.rstrip())
+
 print(frame_to_save)
 while True:
 	try:
